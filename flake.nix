@@ -46,7 +46,7 @@
                             type = builtins.typeOf value ;
                             visitor-fun = if ! builtins.hasAttr type visitors then builtins.throw "e19d4085-c5cb-4cad-8c5b-e78b4b1aeb8e" else builtins.getAttr type visitors ;
                             visitors = multiples // singletons ;
-                            in { output = output ; } ;
+                            in output ;
                       in visitor ;
               }
       ) ;
