@@ -12,7 +12,7 @@
                 lib =
 		  {
 		    bool ? false ,
-		    float ? false ,
+		    float ? false		 ,
 		    int ? false ,
 		    lambda ? false ,
 		    list ? false ,
@@ -25,7 +25,6 @@
 		      visitor =
 		        value :
 			  let
-			    is-list = type == "list" ;
 			    multiples =
 			      in
 			        {
