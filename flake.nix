@@ -36,7 +36,7 @@
                                         let
                                           index = previous.index + ( if is-simple then 1 else 0 ) ;
                                           input = if is-list then builtins.elemAt track.input current else builtins.getAttr current track.input ;
-                                          is-simple = builtins.any ( type : builtins.typeOf input == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ]
+                                          is-simple = builtins.any ( type : builtins.typeOf input == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                           output = visitor track ;
                                           path = builtins.concatLists [ track.path [ current ] ] ;
                                           track = { index = index ; input = input ; path = path ; type = type ; } ;
