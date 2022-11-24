@@ -11,15 +11,15 @@
               {
                 lib =
 		  {
-		    bool = false ;
-		    float = false ;
-		    int = false ;
-		    lambda = false ;
-		    list = false ;
-		    path = false ;
-		    set = false ;
-		    string = false ;
-		    undefined = false ;
+		    bool ? false ,
+		    float ? false ,
+		    int ? false ,
+		    lambda ? false ,
+		    list ? false ,
+		    path ? false ,
+		    set ? false ,
+		    string ? false ,
+		    undefined ? false
 		  } :
 		    let
 		      visitor =
@@ -27,16 +27,11 @@
 			  let
 			    is-list = type == "list" ;
 			    multiples =
-			      let
-			        initial = if is-list then builtins.genList ( i : i ) builtins.length value else builtins.attrNames value ;
-				reducer =
-				  previous : current :
-				output = builtins.foldl' reducer initial value ;
-			        in
-			          {
-			            list = if builtins.typeOf list != "list" then builtins.throw "a8be822f-1fbd-4c2e-bbbb-b175f7d1480b" else list output ;
-				    set = if builtins.typeOf set != "set" then builtins.throw "5b99bcbd-ebe8-4926-9684-d49c02e3f631" else set output ;
-			          } ;
+			      in
+			        {
+			          list = if builtins.typeOf list != "lambda" then builtins.throw "a8be822f-1fbd-4c2e-bbbb-b175f7d1480b" else list ( builtins.map visitor value ) ;
+			          set = if builtins.typeOf set != "lambda" then builtins.throw "5b99bcbd-ebe8-4926-9684-d49c02e3f631" else set ( builtins.mapAttr ( name : value : visitor value ) value ) ;
+			        } ;
 			    output =
 			      if ! builtins.getAttr "success" builtins.tryEval ( visitor-fun value ) then builtins.throw "e154aef8-04a6-4fa0-9bec-a9f4771e2a24"
 			      else visitor-fun value ;
