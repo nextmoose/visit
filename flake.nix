@@ -16,6 +16,7 @@
                     int ? false ,
                     lambda ? false ,
                     list ? false ,
+                    null ? false ,
                     path ? false ,
                     set ? false ,
                     string ? false ,
@@ -23,31 +24,46 @@
                   } :
                     let
                       visitor =
-                        value :
-                          let
-                            multiples =
-                              {
-                                list = if builtins.typeOf list != "lambda" then builtins.throw "a8be822f-1fbd-4c2e-bbbb-b175f7d1480b" else list ( builtins.map visitor value ) ;
-                                set = if builtins.typeOf set != "lambda" then builtins.throw "5b99bcbd-ebe8-4926-9684-d49c02e3f631" else set ( builtins.mapAttrs ( name : value : visitor value ) value ) ;
-                              } ;
-                            output =
-                              if ! builtins.getAttr "success" ( builtins.tryEval ( visitor-fun value ) ) then builtins.throw "e154aef8-04a6-4fa0-9bec-a9f4771e2a24"
-                              else visitor-fun value ;
-                            singletons =
-                              let
-                                defined = { bool = bool ; float = float ; int = int ; lambda = lambda ; path = path ; string = string ; } ;
-                                mapper =
-                                  name : value :
-                                    if name != type then builtins.throw "5f38825e-4a6c-4480-a05d-89fadce728db"
-                                    else if builtins.typeOf value != "lambda" && builtins.typeOf undefined != "lambda" then builtins.throw "f7a4b8d7-be7e-4f4a-96f1-02fbababb09b"
-                                    else if builtins.typeOf value == "lambda" then value
+                        let
+                          visitors =
+                            let
+                              multiple =
+                                is-list : specific : track :
+                                  let
+                                    list = if is-list then builtins.genList ( n : n ) ( builtins.length track.input ) else builtins.attrNames track.input ;
+                                    reducer =
+                                      previous : current :
+                                        let
+                                          index = previous.index + ( if is-simple then 1 else 0 ) ;
+                                          input = if is-list then builtins.elemAt track.input current else builtins.getAttr current track.input ;
+                                          is-simple = builtins.any ( type : builtins.typeOf input == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ]
+                                          output = visitor track ;
+                                          path = builtins.concatLists [ track.path [ current ] ] ;
+                                          track = { index = index ; input = input ; path = path ; type = type ; } ;
+					  type = builtins.typeOf input ;
+                                          in track // { output = output ; } ;
+                                    in single specific ( builtins.foldl' reducer track list ) ;
+                              single = specific :
+			        let
+				  lambda =
+                                    if builtins.typeOf specific != "lambda" && builtins.typeOf undefined != "lambda" then builtins.throw "5d979370-ae2e-44ab-a61e-7869292ece02"
+                                    else if builtins.typeOf specific == "lambda" then specific
                                     else undefined ;
-                                in builtins.mapAttrs mapper defined ;
-                            type = builtins.typeOf value ;
-                            visitor-fun = if ! builtins.hasAttr type visitors then builtins.throw "e19d4085-c5cb-4cad-8c5b-e78b4b1aeb8e" else builtins.getAttr type visitors ;
-                            visitors = multiples // singletons ;
-                            in output ;
-                      in visitor ;
+				  in track : track // { output = lambda track ; type = builtins.typeOf track.input ; } ;
+                              in
+                                {
+                                  bool = single bool ;
+                                  float = single float ;
+                                  int = single int ;
+                                  lambda = single lambda ;
+                                  list = multiple true list ;
+                                  null = single null ;
+                                  path = single path ;
+                                  set = multiple false set ;
+                                  string = single ;
+                                } ;
+	                  in track : builtins.getAttr track.type visitors ;
+                      in value : visitor { index = 0 ; input = value ; path = [ ] ; type = builtins.typeOf value ; visitor = visitor ; } ;
               }
       ) ;
     }
