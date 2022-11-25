@@ -57,8 +57,9 @@
 				    else null ;
 				  output = builtins.mapAttrs find input ;
 				  reducer =
-				    if is-simple then previous : current : previous
-				    else null ;
+				    previous : current :
+				      if is-simple then previous
+				      else null ;
 				  visit = track : builtins.foldl' reducer initial list ;
 				  in
 				    {
