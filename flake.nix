@@ -47,7 +47,7 @@
                                                     in builtins.concatLists [ previous [ ( track ( node + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
                                               in builtins.foldl' reducer initial list
                                           else null ;
-                                        in builtins.trace "YES ${ builtins.typeOf track }" ( track // eval ) ;
+                                        in builtins.trace "YES ${ builtins.typeOf eval }" ( track // eval ) ;
                                   find =
                                     name : value :
                                       let
