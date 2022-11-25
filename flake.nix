@@ -68,14 +68,15 @@
                                   is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "a0015af2-57e5-4a16-8e06-74408562c1bf" ;
                                   output = builtins.mapAttrs find input ;
-                                  processed = track : ( eval track ) // { output = lambda ( eval track ) ; } ;
+                                  process = track : ( eval track ) // { output = lambda ( eval track ) ; } ;
                                   visit =
                                     track :
                                       let
-                                        p = processed track ;
+                                        p = process track ;
                                         in if builtins.hasAttr "output" p then p.output else builtins.throw "b929aecd-55eb-463c-9659-ca7b1730ca50" ;
                                   in
                                     {
+				      eval = eval ;
                                       find = find ;
                                       identity = identity ;
                                       input = input ;
@@ -83,6 +84,7 @@
                                       is-simple = is-simple ;
                                       lambda = lambda ;
                                       output = output ;
+				      process = process ;
                                       undefined = undefined ;
                                       visit = visit ;
                                     } ;
