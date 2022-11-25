@@ -64,8 +64,8 @@
 			        {
 				  input = value ;
 				  index = index ;
-				  lambdas = lambdas ;
 				  path = path ;
+				  track = track ;
 				  type = type ;
 				} ;
 			visitor = track : track // { output = output.track.visit track ; } ;
