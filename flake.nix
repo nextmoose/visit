@@ -61,7 +61,7 @@
 				  reducer =
 				    previous : current :
 				      if is-simple then previous
-				      else if is-list then builtins.trace ( builtins.typeOf previous ) ( builtins.concatLists [ previous [ ( visitor current ) ] ] )
+				      else if is-list then builtins.trace ( builtins.typeOf current ) ( builtins.concatLists [ previous [ ( visitor current ) ] ] )
 				      else null ;
 				  visit = track : builtins.foldl' reducer initial list ;
 				  in
