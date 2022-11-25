@@ -27,6 +27,7 @@
                         let
                           visitors =
                             let
+			      identity = x : x ;
                               multiple =
                                 is-list : specific : track :
                                   let
@@ -46,7 +47,7 @@
                               single = specific :
 			        let
 				  lambda =
-                                    if builtins.typeOf specific != "lambda" && builtins.typeOf undefined != "lambda" then builtins.throw "5d979370-ae2e-44ab-a61e-7869292ece02"
+                                    if builtins.typeOf specific != "lambda" && builtins.typeOf undefined != "lambda" then identity
                                     else if builtins.typeOf specific == "lambda" then specific
                                     else undefined ;
 				  in track : track // { output = lambda track ; type = builtins.typeOf track.input ; } ;
