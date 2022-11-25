@@ -42,7 +42,7 @@
 					      let
 					        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
 						in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
-					  in builtins.foldl' reducer initial list ;
+					  in builtins.foldl' reducer initial list
 				      else null ;
 				  find =
 				    name : value :
