@@ -31,8 +31,9 @@
                             let
                               tasks =
                                 let
-                                  eval = builtins.trace "YES" (
+                                  eval =
                                     track :
+				      builtins.trace "YES ${ builtins.typeOf track }"
                                       let
                                         eval =
                                           if is-simple then { size = 1 ; }
