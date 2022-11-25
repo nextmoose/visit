@@ -36,10 +36,6 @@
 				        filtered = builtins.filter ( l : builtins.typeOf l == "lambda" ) [ value undefined identity ] ;
 					in if builtins.length filtered == 0 then builtins.throw "020ecb5f-9b6d-4e0a-ad14-5005be7b29f5" else builtins.elemAt filtered 0 ;
 			          identity = x : x ;
-				  initial =
-				    if is-simple then value
-				    else if is-list then [ ]
-				    else null ;
 				  input =
 				    {
 				      bool = bool ;
@@ -53,17 +49,20 @@
 			          is-list = type == "list" ;
 			          is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
 			          lambda = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "a0015af2-57e5-4a16-8e06-74408562c1bf" ;
-				  list =
-				    if is-simple then [ ]
-				    else if is-list then builtins.map ( value : track index path value ) value
-				    else null ;
 				  output = builtins.mapAttrs find input ;
-				  reducer =
-				    previous : current :
-				      if is-simple then previous
-				      else if is-list then builtins.concatLists [ previous [ ( visitor current ) ] ]
+				  visit =
+				    track :
+				      if is-simple then lambda track
+				      else if is-list then
+				        let
+					  initial = [ ] ;
+					  reducer =
+					    previous : current :
+					      let
+					        in builtins.concatLists [ previous [ ( track index path current ) ] ] ;
+					  list = builtins.genList identity ( builtins.length track.input ) ;
+					  in lambda ( builtins.foldl' reducer initial list )
 				      else null ;
-				  visit = track : builtins.foldl' reducer initial list ;
 				  in
 				    {
 				      find = find ;
