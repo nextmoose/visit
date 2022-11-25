@@ -50,6 +50,21 @@
 			          is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
 			          lambda = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "a0015af2-57e5-4a16-8e06-74408562c1bf" ;
 				  output = builtins.mapAttrs find input ;
+				  processed =
+				    track :
+				      if is-simple then track // { size = 1 ; }
+				      else if is-list then
+				        let
+					  initial = [ { input = [ ] ; size = 0 ; } ] ;
+					  list = builtins.genList identity ( builtins.length value ) ;
+					  reducer =
+					    previous : current :
+					      let
+					        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
+						in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
+					  eval = builtins.foldl' reducer initial list ;
+					  in track // eval ;
+				      else null ;
 				  visit =
 				    track :
 				      if is-simple then lambda track
