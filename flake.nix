@@ -28,6 +28,8 @@
                         track =
                           index : input : path :
                             let
+			      is-list = type == "list" ;
+			      is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambda =
                                 let
                                   first =
@@ -53,10 +55,7 @@
 			      output =
 			        let
 				  in lambda processed ;
-			      processed =
-			        if type == "list" then null
-				else if type == "set" then null
-				else input ;
+			      processed = if is-simple then input else null ;
                               type = builtins.typeOf input ;
                               in
                                 {
