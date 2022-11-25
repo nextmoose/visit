@@ -32,18 +32,21 @@
 			        let
 				  eval =
 				    track :
-				      if is-simple then { size = 1 ; }
-				      else if is-list then
-				        let
-					  initial = [ { input = [ ] ; size = 0 ; } ] ;
-					  list = builtins.genList identity ( builtins.length value ) ;
-					  reducer =
-					    previous : current :
-					      let
-					        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
-						in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
-					  in builtins.foldl' reducer initial list
-				      else null ;	     
+				      let
+				        eval =
+				          if is-simple then { size = 1 ; }
+				          else if is-list then
+				            let
+					      initial = [ { input = [ ] ; size = 0 ; } ] ;
+					      list = builtins.genList identity ( builtins.length value ) ;
+					      reducer =
+					        previous : current :
+					          let
+					            last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
+						    in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
+					      in builtins.foldl' reducer initial list
+				          else null ;
+					in track // eval ;
 				  find =
 				    name : value :
 				      let
@@ -64,7 +67,7 @@
 			          is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
 			          lambda = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "a0015af2-57e5-4a16-8e06-74408562c1bf" ;
 				  output = builtins.mapAttrs find input ;
-				  processed = track : track // ( eval track ) // { output = lambda ( eval track ) ; } ;
+				  processed = track : ( eval track ) // { output = lambda ( eval track ) ; } ;
 				  visit =
 				    track :
 				      let
