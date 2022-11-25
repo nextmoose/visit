@@ -33,7 +33,6 @@
                                 let
                                   eval =
                                     track :
-				      builtins.trace "YES ${ builtins.typeOf track }"
                                       let
                                         eval =
                                           if is-simple then { size = 1 ; }
@@ -48,7 +47,7 @@
                                                     in builtins.concatLists [ previous [ ( track ( node + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
                                               in builtins.foldl' reducer initial list
                                           else null ;
-                                        in track // eval ) ;
+                                        in builtins.trace "YES" ( track // eval ) ;
                                   find =
                                     name : value :
                                       let
