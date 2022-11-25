@@ -26,37 +26,39 @@
                       let
 		        root = track 0 value [ ] ;
                         track =
-                          index : input : path :
+                          index : value : path :
                             let
-			      is-list = type == "list" ;
-			      is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
-                              lambda =
-                                let
-                                  first =
-                                    name : value :
-                                      let
-                                        filtered = builtins.filter ( function : builtins.typeOf function == "lambda" ) [ value undefined identity ] ;
-                                        identity = x : x ;
-                                        in if builtins.length filtered == 0 then builtins.throw "a15ffabd-f8d1-4af1-9e84-c13c6f043fd0" else builtins.elemAt filtered 0 ;
-                                  input-functions =
-                                    {
-                                      bool = bool ;
-                                      float = float ;
-                                      int = int ;
-                                      lambda = lambda ;
-                                      list = list ;
-                                      null = null ;
-                                      path = path ;
-                                      set = set ;
-                                      string = string ;
-                                    } ;
-                                  output-functions = builtins.mapAttrs first input-functions ;
-                                  in builtins.getAttr type output-functions ;
+			      input =
+			        let
+				  is-list = type == "list" ;
+				  is-simple = builtins.any ( t : type == t ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
+                                  lambda =
+                                    let
+                                      first =
+                                        name : value :
+                                          let
+                                            filtered = builtins.filter ( function : builtins.typeOf function == "lambda" ) [ value undefined identity ] ;
+                                            identity = x : x ;
+                                            in if builtins.length filtered == 0 then builtins.throw "a15ffabd-f8d1-4af1-9e84-c13c6f043fd0" else builtins.elemAt filtered 0 ;
+                                      input-functions =
+                                        {
+                                          bool = bool ;
+                                          float = float ;
+                                          int = int ;
+                                          lambda = lambda ;
+                                          list = list ;
+                                          null = null ;
+                                          path = path ;
+                                          set = set ;
+                                          string = string ;
+                                        } ;
+                                      output-functions = builtins.mapAttrs first input-functions ;
+                                      in builtins.getAttr type output-functions ;
+				  in if is-simple then lambda value else null ;
 			      output =
 			        let
 				  in lambda processed ;
-			      processed = if is-simple then input else null ;
-                              type = builtins.typeOf input ;
+                              type = builtins.typeOf value ;
                               in
                                 {
                                   index = index ;
