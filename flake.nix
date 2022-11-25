@@ -28,7 +28,7 @@
 		        track =
 			  index : path : value :
 			    let
-			      track =
+			      tasks =
 			        let
 				  find =
 				    name : value :
@@ -65,10 +65,10 @@
 				  input = value ;
 				  index = index ;
 				  path = path ;
-				  track = track ;
+				  tasks = tasks ;
 				  type = type ;
 				} ;
-			visitor = track : track // { output = output.track.visit track ; } ;
+			visitor = track : track // { output = track.tasks.visit track ; } ;
 			in root.output ;
               }
       ) ;
