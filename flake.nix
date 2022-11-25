@@ -52,16 +52,7 @@
 				  output = builtins.mapAttrs find input ;
 				  visit =
 				    track :
-				      if is-simple then lambda track
-				      else if is-list then
-				        let
-					  initial = [ ] ;
-					  reducer =
-					    previous : current :
-					      let
-					        in builtins.concatLists [ previous [ ( track index path current ) ] ] ;
-					  list = builtins.genList identity ( builtins.length track.input ) ;
-					  in lambda ( builtins.foldl' reducer initial list )
+				      if is-simple then track.output
 				      else null ;
 				  in
 				    {
