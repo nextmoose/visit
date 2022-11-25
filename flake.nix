@@ -22,49 +22,50 @@
                     string ? false ,
                     undefined ? false
                   } :
-                    let
-                      visitor =
-                        let
-                          visitors =
+                    value :
+                      let
+		        root = track 0 value [ ] ;
+                        track =
+                          index : input : path :
                             let
-			      identity = x : x ;
-                              multiple =
-                                is-list : specific : track :
-                                  let
-                                    list = if is-list then builtins.genList ( n : n ) ( builtins.length track.input ) else builtins.attrNames track.input ;
-                                    reducer =
-                                      previous : current :
-                                        let
-                                          index = previous.index + ( if is-simple then 1 else 0 ) ;
-                                          input = if is-list then builtins.elemAt track.input current else builtins.getAttr current track.input ;
-                                          is-simple = builtins.any ( type : builtins.typeOf input == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
-                                          output = visitor track ;
-                                          path = builtins.concatLists [ track.path [ current ] ] ;
-                                          track = { index = index ; input = input ; path = path ; type = type ; } ;
-					  type = builtins.typeOf input ;
-                                          in track // { output = output ; } ;
-                                    in single specific ( builtins.foldl' reducer track list ) ;
-                              single = specific :
+                              lambda =
+                                let
+                                  first =
+                                    name : value :
+                                      let
+                                        filtered = builtins.filter ( function : builtins.typeOf function == "lambda" ) [ value undefined identity ] ;
+                                        identity = x : x ;
+                                        in if builtins.length filtered == 0 then builtins.throw "a15ffabd-f8d1-4af1-9e84-c13c6f043fd0" else builtins.elemAt filtered 0 ;
+                                  input-functions =
+                                    {
+                                      bool = bool ;
+                                      float = float ;
+                                      int = int ;
+                                      lambda = lambda ;
+                                      list = list ;
+                                      null = null ;
+                                      path = path ;
+                                      set = set ;
+                                      string = string ;
+                                    } ;
+                                  output-functions = builtins.mapAttrs first input-functions ;
+                                  in builtins.getAttr type output-functions ;
+			      output =
 			        let
-				  lambda =
-                                    if builtins.typeOf specific != "lambda" && builtins.typeOf undefined != "lambda" then identity
-                                    else if builtins.typeOf specific == "lambda" then specific
-                                    else undefined ;
-				  in track : track // { output = lambda track ; type = builtins.typeOf track.input ; } ;
+				  in lambda processed ;
+			      processed =
+			        if type == "list" then null
+				else if type == "set" then null
+				else input ;
+                              type = builtins.typeOf input ;
                               in
                                 {
-                                  bool = single bool ;
-                                  float = single float ;
-                                  int = single int ;
-                                  lambda = single lambda ;
-                                  list = multiple true list ;
-                                  null = single null ;
-                                  path = single path ;
-                                  set = multiple false set ;
-                                  string = single ;
+                                  index = index ;
+                                  input = input ;
+                                  path = path ;
+                                  type = type ;
                                 } ;
-	                  in track : builtins.getAttr track.type visitors ;
-                      in value : visitor { index = 0 ; input = value ; path = [ ] ; type = builtins.typeOf value ; visitor = visitor ; } ;
+                        in root.output ;
               }
       ) ;
     }
