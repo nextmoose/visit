@@ -24,6 +24,7 @@
                   } :
                     value :
                       let
+		        node = track ;
 		        root = visitor ( track 0 [ ] value ) ;
 		        track =
 			  index : path : value :
@@ -43,7 +44,7 @@
 					        previous : current :
 					          let
 					            last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
-						    in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
+						    in builtins.concatLists [ previous [ ( track ( node + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
 					      in builtins.foldl' reducer initial list
 				          else null ;
 					in track // eval ;
