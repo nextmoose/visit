@@ -1,4 +1,4 @@
-  {
+p  {
       inputs =
         {
           flake-utils.url = "github:numtide/flake-utils" ;
@@ -96,7 +96,7 @@
                                   type = type ;
                                 } ;
                         visitor = track : track // { output = track.tasks.visit track ; } ;
-                        in root.output ;
+                        in root.tasks.visit root ;
               }
       ) ;
     }
