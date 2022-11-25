@@ -53,6 +53,7 @@
 				  visit =
 				    track :
 				      if is-simple then lambda track
+				      else if is-list then 
 				      else null ;
 				  in
 				    {
