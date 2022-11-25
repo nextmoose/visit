@@ -31,7 +31,7 @@
                             let
                               tasks =
                                 let
-                                  eval =
+                                  eval = builtins.trace "YES" (
                                     track :
                                       let
                                         eval =
@@ -47,7 +47,7 @@
                                                     in builtins.concatLists [ previous [ ( track ( node + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
                                               in builtins.foldl' reducer initial list
                                           else null ;
-                                        in track // eval ;
+                                        in track // eval ) ;
                                   find =
                                     name : value :
                                       let
