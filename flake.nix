@@ -30,6 +30,20 @@
 			    let
 			      tasks =
 			        let
+				  eval =
+				    track :
+				      if is-simple then { size = 1 ; }
+				      else if is-list then
+				        let
+					  initial = [ { input = [ ] ; size = 0 ; } ] ;
+					  list = builtins.genList identity ( builtins.length value ) ;
+					  reducer =
+					    previous : current :
+					      let
+					        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
+						in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
+					  in builtins.foldl' reducer initial list ;
+				      else null ;
 				  find =
 				    name : value :
 				      let
@@ -50,26 +64,12 @@
 			          is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
 			          lambda = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "a0015af2-57e5-4a16-8e06-74408562c1bf" ;
 				  output = builtins.mapAttrs find input ;
-				  processed =
-				    track :
-				      if is-simple then track // { size = 1 ; }
-				      else if is-list then
-				        let
-					  initial = [ { input = [ ] ; size = 0 ; } ] ;
-					  list = builtins.genList identity ( builtins.length value ) ;
-					  reducer =
-					    previous : current :
-					      let
-					        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
-						in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
-					  eval = builtins.foldl' reducer initial list ;
-					  in track // eval
-				      else null ;
+				  processed = track : track // ( eval track ) // { output = lambda ( eval track ) ; } ;
 				  visit =
 				    track :
-				      if is-simple then lambda track
-				      else if is-list then null
-				      else null ;
+				      let
+				        p = processed track ;
+					in if builtins.hasAttr "output" p then p.output else builtins.throw "b929aecd-55eb-463c-9659-ca7b1730ca50" ;
 				  in
 				    {
 				      find = find ;
