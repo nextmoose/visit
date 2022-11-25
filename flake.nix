@@ -58,7 +58,7 @@
 				      input = input ;
 				      output = output ;
 				      undefined = undefined ;
-				      visit = visit ;s
+				      visit = visit ;
 				    } ;
 			      type = builtins.typeOf value ;
 			      in
