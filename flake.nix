@@ -58,6 +58,7 @@
 				      input = input ;
 				      output = output ;
 				      undefined = undefined ;
+				      visit = visit ;s
 				    } ;
 			      type = builtins.typeOf value ;
 			      in
