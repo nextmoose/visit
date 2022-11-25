@@ -55,13 +55,13 @@
 			          lambda = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "a0015af2-57e5-4a16-8e06-74408562c1bf" ;
 				  list =
 				    if is-simple then [ ]
-				    else if is-list then value
+				    else if is-list then builtins.map ( value : track index path value ) value ;
 				    else null ;
 				  output = builtins.mapAttrs find input ;
 				  reducer =
 				    previous : current :
 				      if is-simple then previous
-				      else if is-list then builtins.trace ( builtins.toString ( builtins.length previous ) ) ( builtins.concatLists [ previous [ ( visitor current ) ] ] )
+				      else if is-list then builtins.concatLists [ previous [ ( visitor current ) ] ]
 				      else null ;
 				  visit = track : builtins.foldl' reducer initial list ;
 				  in
