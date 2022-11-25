@@ -63,7 +63,7 @@
 				      if is-simple then previous
 				      else if is-list then builtins.concatLists [ previous [ ( visitor current ) ] ]
 				      else null ;
-				  visit = track : if is-list then "SURPRISE" else builtins.foldl' reducer initial list ;
+				  visit = track : builtins.foldl' reducer initial list ;
 				  in
 				    {
 				      find = find ;
