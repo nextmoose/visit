@@ -52,7 +52,7 @@
 				  output = builtins.mapAttrs find input ;
 				  visit =
 				    track :
-				      if is-simple then track.output
+				      if is-simple then lambda track.input
 				      else null ;
 				  in
 				    {
