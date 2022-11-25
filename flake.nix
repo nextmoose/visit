@@ -63,7 +63,7 @@
 					        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
 						in builtins.concatLists [ previous [ ( track ( index + last.size ) ( builtins.concatLists path current ) ( builtins.elemAt value current ) ) ] ] ;
 					  eval = builtins.foldl' reducer initial list ;
-					  in track // eval ;
+					  in track // eval
 				      else null ;
 				  visit =
 				    track :
