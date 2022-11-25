@@ -61,6 +61,7 @@
                                 {
                                   index = index ;
                                   input = input ;
+				  output = output ;
                                   path = path ;
                                   type = type ;
                                 } ;
