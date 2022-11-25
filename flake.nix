@@ -60,7 +60,7 @@
                               in
                                 {
                                   index = index ;
-                                  input = input ;
+                                  input = input ;		
 				  output = output ;
                                   path = path ;
                                   type = type ;
