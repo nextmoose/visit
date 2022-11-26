@@ -66,13 +66,13 @@
 			        let
 				  initial = if is-simple then input else if is-list then [ ] else { } ;
 				  list = if is-simple then [ ] else if is-list then builtins.genList predicates.identity ( builtins.length input ) else builtins.attrNames input ;
-				  in builtins.foldl' reducers.processed initial list ;
+				  in builtins.foldl' ( "YES" ) ( builtins.foldl' reducers.processed initial list ) ;
                               reducers =
                                 {
                                   processed =
                                     previous : current :
                                       let
-                                        last = builtins.trace ( builtins.typeOf previous ) ( builtins.foldl' reducers.size index ( if is-simple then previous else if is-list then previous else builtins.attrValues previous ) ) ;
+                                        last = builtins.foldl' reducers.size index ( if is-simple then previous else if is-list then previous else builtins.attrValues previous ) ;
                                         next =
                                           caller
                                             ( index + last )
