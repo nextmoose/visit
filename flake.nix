@@ -18,7 +18,7 @@
                     list ? false ,
                     null ? false ,
                     path ? false ,
-                    set ? "" ,
+                    set ? false ,
                     string ? false ,
                     undefined ? false
                   } :
