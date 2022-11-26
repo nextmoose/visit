@@ -50,7 +50,7 @@
                                 in
                                   {
                                     find = find ;
-                                    identity = indentity ;
+                                    identity = identity ;
                                     input = input ;
                                     output = output ;
                                     undefined = undefined ;
