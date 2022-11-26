@@ -91,7 +91,8 @@
                             size = previous : current : previous + current.size ;
                           } ;
 			root = process 0 ;
-		        in root.output value ;
+			in "HELLO" ;
+		        # in root.output ;
               }
       ) ;
     }
