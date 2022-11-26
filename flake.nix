@@ -46,7 +46,6 @@
                               fields =
                                 {
                                   index = track : first ;
-                                  input = track : value ;
                                   is-list = track : track.type == "list" ;
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
@@ -72,7 +71,6 @@
                                 } ;
                               list =
                                 [
-                                  sets.input
                                   sets.index
                                   sets.size
                                   sets.type
