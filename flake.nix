@@ -36,7 +36,7 @@
                              } ;
                            set =
                              {
-                               process = name : value : builtins.listToAttrs [ { name = name ; value = value ; } ] ;
+                               process = name : value : track : builtins.listToAttrs [ { name = name ; value = value track ; } ] ;
                                processed = name : value : mappers.list.processed "" ;
                              } ;
                           } ;
