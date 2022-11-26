@@ -30,7 +30,7 @@
 			      let
 				initial = { size = 0 ; } ;
 			        is-list = type == "list" ;
-			        is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
+			        is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
 			        lambdas =
 			          let
 				    find = name : element : builtins.head ( builtins.filter ( builtins.typeOf element == "lambda" ) [ element undefined identity ] ) ;
@@ -59,9 +59,14 @@
 					value = value ;
 			              } ;
 				output = lambdas.value track ;
+				predicates =
+				  {
+				    identity = x : x ;
+				    is-type = item : item == type ;
+				  } ;
 		                processed =
 				  if is-simple then input
-				  else if is-list then builtins.foldl' reducers.processes initial ( builtins.genList ( x : x ) ( builtins.length input ) )
+				  else if is-list then builtins.foldl' reducers.processes initial ( builtins.genList predicates.identity ( builtins.length input ) )
 				  else builtins.foldl' reducers.processed initial ( builtins.attrNames input ) ;
 				reducers =
 				  {
@@ -92,6 +97,7 @@
 				    is-simple = is-simple ;
 				    lambdas = lambdas ;
 				    path = path ;
+				    predicates = predicates ;
 				    processed = processed ;
 				    reducers = reducers ;
 				    size = size ;
