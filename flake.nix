@@ -11,10 +11,10 @@
               {
                 lib =
                   {
-                    bool ? "" ,
-                    float ? "" ,
-                    int ? "" ,
-                    lambda ? "" ,
+                    bool ? false ,
+                    float ? false ,
+                    int ? false ,
+                    lambda ? false ,
                     list ? "" ,
                     null ? "" ,
                     path ? "" ,
