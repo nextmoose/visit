@@ -36,7 +36,7 @@
                              } ;
                            set =
                              {
-                               process = name : value : track : builtins.trace "++ ${ builtins.typeOf ( value ) }" { ${ name } = value track ; } ;
+                               process = name : value : track : { ${ name } = value track ; } ;
                                processed = name : value : mappers.list.processed "" ;
                              } ;
                           } ;
@@ -45,7 +45,7 @@
                             let
                               fields =
                                 {
-                                  index = track : builtins.typeOf ">> ${ builtins.typeOf track.input }" first ;
+                                  index = track : builtins.trace ">> ${ builtins.typeOf track.input }" first ;
 				  input = track : builtins.trace "<< ${ builtins.typeOf value }" { input = value ; } ;
                                   is-list = track : track.type == "list" ;
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
