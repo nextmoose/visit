@@ -41,11 +41,12 @@
                              } ;
                           } ;
                         process =
-			  first :
+			  first : value :
                             let
                               fields =
                                 {
                                   index = track : first ;
+				  input = track : { input = value ; } ;
                                   is-list = track : track.type == "list" ;
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
@@ -65,12 +66,13 @@
                                         } ;
                                   lambda-output = track : functions.find track.lambda-input ;
                                   output = track : track.lambda-output track ;
-                                  processed = track : if track.is-simple then track.input else if track.is-list then builtins.map mappers.list.processed track.input else builtins.mapAttrs mappers.set.processed track.input ;
+                                  processed = track : if track.is-simple then track.input else if track.is-list then builtins.foldl' reducers.processed { } track.input else builtins.mapAttrs mappers.set.processed track.input ;
                                   size = track : if track.is-simple then 1 else if track.is-list then builtins.foldl' reducers.size 0 track.input else builtins.foldl' reducers.size 0 ( builtins.attrValues track.input ) ;
                                   type = track : builtins.typeOf track.input ;
                                 } ;
                               list =
                                 [
+				  sets.input
                                   sets.index
                                   sets.size
                                   sets.type
@@ -82,13 +84,18 @@
                                   sets.output
                                 ] ;
                               sets = builtins.mapAttrs mappers.set.process fields ;
-                              in builtins.foldl' reducers.process { input = value ; } list ;
+                              in builtins.foldl' reducers.process { } list ;
                         reducers =
                           {
                             process = previous : current : previous // ( current previous ) ;
+			    processed =
+			      previous : current :
+			        let
+				  last = builtins.elemAt ( builtins.length previous - 1 ) ;
+			          in builtins.concatLists [ previous ( process last.size current ) ] ;
                             size = previous : current : previous + current.size ;
                           } ;
-			root = process 0 ;
+			root = process 0 value ;
 		        in root.output ;
               }
       ) ;
