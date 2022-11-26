@@ -91,7 +91,7 @@
                             size = previous : current : previous + current.size ;
                           } ;
 			root = process 0 ;
-			to-string = set : builtins.concatStringsSep " , " ( builtins.attrValues ( builtins.mapAttrs ( name : value : builtins.concatStringsSep " = " [ name ( builtins.typeOf value ) ( if builtins.typeOfValue == "string" then value else "NOT A STRING" ) ] ) set ) ) ;
+			to-string = set : builtins.concatStringsSep " , " ( builtins.attrValues ( builtins.mapAttrs ( name : value : builtins.concatStringsSep " = " [ name ( builtins.typeOf value ) ( if builtins.typeOf value == "string" then value else "NOT A STRING" ) ] ) set ) ) ;
 			in builtins.concatStringsSep " , " ( builtins.attrValues ( builtins.mapAttrs ( name : value : "${ name } = ${ builtins.typeOf value } = ${ if builtins.typeOf value == "string" then value else "NOT A STRING" }" ) root ) ) ;
 		        # in root.output ;
               }
