@@ -87,7 +87,7 @@
                               in builtins.foldl' reducers.process { } list ;
                         reducers =
                           {
-                            process = previous : current : builtins.trace ( to-tring current ) ( previous // current ) ;
+                            process = previous : current : builtins.trace ( to-string current ) ( previous // current ) ;
                             size = previous : current : previous + current.size ;
                           } ;
 			root = process 0 ;
