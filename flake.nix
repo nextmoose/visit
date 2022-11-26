@@ -65,11 +65,11 @@
                                 } ;
                               processed =
                                 if is-simple then input
-                                else if is-list then builtins.foldl' reducers.processes initial ( builtins.genList predicates.identity ( builtins.length input ) )
+                                else if is-list then builtins.foldl' reducers.processed initial ( builtins.genList predicates.identity ( builtins.length input ) )
                                 else builtins.foldl' reducers.processed initial ( builtins.attrNames input ) ;
                               reducers =
                                 {
-                                  list =
+                                  processed =
                                     previous : current :
                                       let
                                         last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
