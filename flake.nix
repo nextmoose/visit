@@ -11,16 +11,16 @@
               {
                 lib =
                   {
-                    bool ? false ,
-                    float ? false ,
-                    int ? false ,
-                    lambda ? false ,
+                    bool ? "" ,
+                    float ? "" ,
+                    int ? "" ,
+                    lambda ? "" ,
                     list ? "" ,
-                    null ? false ,
-                    path ? false ,
-                    set ? false ,
-                    string ? 9 ,
-                    undefined ? false
+                    null ? "" ,
+                    path ? "" ,
+                    set ? "" ,
+                    string ? "" ,
+                    undefined ? ""
                   } :
                     input :
                       let
