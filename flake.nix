@@ -45,8 +45,8 @@
                             let
                               fields =
                                 {
-                                  index = first ;
-                                  input = track : value ;
+                                  index = track : first ;
+                                  input = value ;
                                   is-list = track : track.type == "list" ;
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
