@@ -27,7 +27,6 @@
                         caller =
                           index : path : input :
                             let
-                              initial = [ { size = 0 ; } ] ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
@@ -65,17 +64,20 @@
                                 } ;
                               processed =
                                 if is-simple then input
-                                else if is-list then builtins.foldl' reducers.processed initial ( builtins.genList predicates.identity ( builtins.length input ) )
-                                else builtins.foldl' reducers.processed initial ( builtins.attrNames input ) ;
+                                else if is-list then builtins.foldl' reducers.processed [ ] ( builtins.genList predicates.identity ( builtins.length input ) )
+                                else builtins.foldl' reducers.processed { } ( builtins.attrNames input ) ;
                               reducers =
                                 {
                                   processed =
                                     previous : current :
                                       let
-                                        last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
+                                        last =
+					  let
+					    length = builtins.length previous ;
+					    in if length == 0 then 0 else builtins.getAttr "size" ( builtins.elemAt previous ( length - 1 ) ) ;
                                         next =
                                           caller
-                                            ( index + last.size )
+                                            ( index + last )
                                             ( builtins.concatLists [ path [ current ] ] )
                                             (
                                               if is-simple then builtins.throw "d9cf8372-1366-4ecb-981a-415799a1e5ab"
@@ -90,7 +92,6 @@
                                 {
                                   caller = caller ;
                                   index = index ;
-                                  initial = initial ;
                                   input = input ;
                                   is-list = is-list ;
                                   is-simple = is-simple ;
