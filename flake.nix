@@ -46,7 +46,7 @@
                               fields =
                                 {
                                   index = track : first ;
-                                  input = value ;
+                                  input = track : value ;
                                   is-list = track : track.type == "list" ;
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
@@ -87,7 +87,7 @@
                               in builtins.foldl' reducers.process { } list ;
                         reducers =
                           {
-                            process = previous : current : previous // current ;
+                            process = previous : current : previous // ( current previous ) ;
                             size = previous : current : previous + current.size ;
                           } ;
 			root = process 0 ;
