@@ -32,12 +32,12 @@
                           {
                            list =
                              {
-                               processed value : value.output ;
+                               processed = value : value.output ;
                              } ;
                            set =
                              {
                                process = name : value : builtins.listToAttrs [ { name = name ; value = value ; } ] ;
-                               processed = name : value : value.output ;
+                               processed = name : value : mappers.list.processed "" ;
                              } ;
                           } ;
                         process =
