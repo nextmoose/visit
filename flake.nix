@@ -18,9 +18,9 @@
                     list ? false ,
                     null ? false ,
                     path ? false ,
-                    set ? false ,
-                    string ? "" ,
-                    undefined ? ""
+                    set ? "" ,
+                    string ? false ,
+                    undefined ? false
                   } :
                     input :
                       let
