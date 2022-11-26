@@ -27,7 +27,7 @@
                         caller =
                           index : path : input :
                             let
-                              initial = { size = 0 ; } ;
+                              initial = [ { size = 0 ; } ] ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
