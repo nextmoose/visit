@@ -22,82 +22,86 @@
                     string ? false ,
                     undefined ? false
                   } :
-                    value :
-                      let
-                        functions =
-                          {
-                            find = fun : builtins.trace ( builtins.typeOf fun ) ( builtins.head ( builtins.filter ( f : builtins.typeOf f == "lambda" ) [ fun undefined ( x : x.processed ) ] ) ) ;
-                          } ;
-                        mappers =
-                          {
-                           list =
-                             {
-                               processed = value : value.output ;
-                             } ;
-                           set =
-                             {
-                               process = name : value : track : { ${ name } = value track ; } ;
-                               processed = name : value : mappers.list.processed "" ;
-                             } ;
-                          } ;
-                        process =
-			  first : value :
-                            let
-                              fields =
-                                {
-                                  index = track : builtins.trace ">> ${ builtins.typeOf track.input }" first ;
-				  input = track : builtins.trace "<< ${ builtins.typeOf value }" { input = value ; } ;
-                                  is-list = track : track.type == "list" ;
-                                  is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
-                                  lambda-input =
-                                    track :
-				      builtins.trace ":: ${ track.type }" (
-				      builtins.getAttr
-				        track.type
-                                        {
-                                          bool = bool ;
-                                          float = float ;
-                                          int = int ;
-                                          lambda = lambda ;
-                                          list = list ;
-                                          null = null ;
-                                          path = path ;
-                                          set = set ;
-                                          string = string ;
-                                        } ) ;
-                                  lambda-output = track : functions.find track.lambda-input ;
-                                  output = track : track.lambda-output track ;
-                                  processed = track : if track.is-simple then track.input else if track.is-list then builtins.foldl' reducers.processed { } track.input else builtins.mapAttrs mappers.set.processed track.input ;
-                                  size = track : if track.is-simple then 1 else if track.is-list then builtins.foldl' reducers.size 0 track.input else builtins.foldl' reducers.size 0 ( builtins.attrValues track.input ) ;
-                                  type = track : builtins.trace ".. ${ builtins.typeOf track.input }" ( builtins.typeOf track.input ) ;
-                                } ;
-                              processors =
-                                [
-				  sets.input
-                                  sets.index
-                                  sets.size
-                                  sets.type
-                                  sets.is-list
-                                  sets.is-simple
-                                  sets.lambda-input
-                                  sets.lambda-output
-                                  sets.processed
-                                  sets.output
-                                ] ;
-                              sets = builtins.mapAttrs mappers.set.process fields ;
-                              in builtins.foldl' reducers.process { } processors ;
-                        reducers =
-                          {
-                            process = previous : current : previous // ( current previous ) ;
-			    processed =
-			      previous : current :
-			        let
-				  last = builtins.elemAt ( builtins.length previous - 1 ) ;
-			          in builtins.concatLists [ previous ( process last.size current ) ] ;
-                            size = previous : current : previous + current.size ;
-                          } ;
-			root = process 0 value ;
-		        in root.output ;
+		    let
+		      caller =
+		        let
+		          caller  =
+		            index : path : input :
+			      let
+				initial = { size = 0 ; } ;
+			        is-list = type == "list" ;
+			        is-simple = builtins.any ( t : t == type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
+			        lambdas =
+			          let
+				    find = name : element : builtins.head ( builtins.filter ( builtins.typeOf element == "lambda" ) [ element undefined identity ] ) ;
+				    identity = item : item.processed ;
+			            input =
+				      {
+				        bool = bool ;
+				        float = float ;
+				        int = int ;
+				        lambda = lambda ;
+				        list = list ;
+				        null = null ;
+				        path = path ;
+				        set = set ;
+				        string = string ;
+				      } ;
+				      output = builtins.mapAttrs find input ;
+				      value = if builtins.hasAttr type input then builtins.getAttr type input else builtins.throw "223c63db-a1d5-48bc-aaca-b4a6c40b15b3" ;
+				    in
+				      {
+				        find = find ;
+				        identity = indentity ;
+			                input = input ;
+			                output = output ;
+				        undefined = undefined ;
+					value = value ;
+			              } ;
+				output = lambdas.value track ;
+		                processed =
+				  if is-simple then input
+				  else if is-list then builtins.foldl' reducers.processes initial ( builtins.genList ( x : x ) ( builtins.length input )
+				  else builtins.foldl' reducers.processed initial ( builtins.attrNames input ) ;
+				reducers =
+				  {
+				    list =
+				      previous : current :
+				        let
+					  last = builtins.elemAt previous ( builtins.length previous - 1 ) ;
+					  next =
+					    caller
+					      ( index + last.size )
+					      ( builtins.concatLists [ path [ current ] ] )
+					      (
+					        if is-simple then builtins.throw "d9cf8372-1366-4ecb-981a-415799a1e5ab"
+					        else if is-list then builtins.elemAt input current ;
+					        else builtins.getAttr current input
+				              ) ;
+					  in builtins.concatLists [ previous [ next ] ] ;
+				    size = previous : current : previous + current.size ;
+				  } ;
+			        size = if is-simple then 1 else if is-list then builtins.foldl' reducers.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrNames input ) ;
+			        track =
+			          {
+				    caller = caller ;
+				    index = index ;
+				    initial = initial ;
+			            input = input ;
+				    is-list = is-list ;
+				    is-simple = is-simple ;
+				    lambdas = lambdas ;
+				    path = path ;
+				    processed = processed ;
+				    reducers = reducers ;
+				    size = size ;
+				    type = type ;
+				    visitor = visitor ;
+			          } ;
+			        type = builtins.typeOf input ;
+				visitor = caller index path ;
+			        in output ;
+			  in caller 0 input ;
               }
       ) ;
     }
