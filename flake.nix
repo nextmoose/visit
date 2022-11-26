@@ -36,7 +36,7 @@
                              } ;
                            set =
                              {
-                               process = name : value : track : builtins.trace "++ ${ builtins.typeOf value track }" { ${ name } = value track ; } ;
+                               process = name : value : track : builtins.trace "++ ${ builtins.typeOf ( value track ) }" { ${ name } = value track ; } ;
                                processed = name : value : mappers.list.processed "" ;
                              } ;
                           } ;
