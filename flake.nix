@@ -82,7 +82,7 @@
                                               else if is-list then builtins.elemAt input current
                                               else builtins.getAttr current input
                                             ) ;
-                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // next ;
+                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else builtins.trace ( builtins.typeOf previous ) ( previous // next ) ;
                                   size = previous : current : previous + current.size ;
                                 } ;
                               size = if is-simple then 1 else if is-list then builtins.foldl' reducers.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrNames input ) ;
