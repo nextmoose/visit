@@ -80,7 +80,7 @@
 					      ( builtins.concatLists [ path [ current ] ] )
 					      (
 					        if is-simple then builtins.throw "d9cf8372-1366-4ecb-981a-415799a1e5ab"
-					        else if is-list then builtins.elemAt input current ;
+					        else if is-list then builtins.elemAt input current
 					        else builtins.getAttr current input
 				              ) ;
 					  in builtins.concatLists [ previous [ next ] ] ;
