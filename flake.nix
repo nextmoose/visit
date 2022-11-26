@@ -83,7 +83,7 @@
                                   sets.processed
                                   sets.output
                                 ] ;
-                              sets = builtins.mapAttr mappers.set.process fields ;
+                              sets = builtins.mapAttrs mappers.set.process fields ;
                               in builtins.foldl' reducers.process { } list ;
                         reducers =
                           {
