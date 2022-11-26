@@ -64,17 +64,14 @@
                                 } ;
                               processed =
                                 if is-simple then input
-                                else if is-list then builtins.foldl' reducers.processed [ ] ( builtins.genList predicates.identity ( builtins.length input ) )
-                                else builtins.foldl' reducers.processed { } ( builtins.attrNames input ) ;
+                                else if is-list then builtins.foldl' reducers.list [ ] ( builtins.genList predicates.identity ( builtins.length input ) )
+                                else builtins.foldl' reducers.list { } ( builtins.attrNames input ) ;
                               reducers =
                                 {
-                                  processed =
+                                  list =
                                     previous : current :
                                       let
-                                        last =
-					  let
-					    length = builtins.length previous ;
-					    in if length == 0 then 0 else builtins.getAttr "size" ( builtins.elemAt previous ( length - 1 ) ) ;
+                                        last = builtins.foldl' reducers.size index previous ;
                                         next =
                                           caller
                                             ( index + last )
