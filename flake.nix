@@ -15,7 +15,7 @@
                     float ? false ,
                     int ? false ,
                     lambda ? false ,
-                    list ? "" ,
+                    list ? false ,
                     null ? "" ,
                     path ? "" ,
                     set ? "" ,
