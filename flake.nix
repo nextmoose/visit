@@ -91,7 +91,7 @@
                             size = previous : current : previous + current.size ;
                           } ;
 			root = process 0 ;
-			in "HELLO" ;
+			in builtins.typeOf root ;
 		        # in root.output ;
               }
       ) ;
