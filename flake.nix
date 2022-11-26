@@ -84,7 +84,7 @@
                                   sets.output
                                 ] ;
                               sets = builtins.mapAttrs mappers.set.process fields ;
-                              in builtins.foldl' reducers.process { } list ;
+                              in builtins.foldl' reducers.process { input = value ; } list ;
                         reducers =
                           {
                             process = previous : current : builtins.trace ( to-string current ) ( previous // current ) ;
