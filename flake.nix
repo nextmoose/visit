@@ -61,7 +61,7 @@
 				output = lambdas.value track ;
 		                processed =
 				  if is-simple then input
-				  else if is-list then builtins.foldl' reducers.processes initial ( builtins.genList ( x : x ) ( builtins.length input )
+				  else if is-list then builtins.foldl' reducers.processes initial ( builtins.genList ( x : x ) ( builtins.length input ) )
 				  else builtins.foldl' reducers.processed initial ( builtins.attrNames input ) ;
 				reducers =
 				  {
