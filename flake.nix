@@ -70,7 +70,7 @@
                                   size = track : if track.is-simple then 1 else if track.is-list then builtins.foldl' reducers.size 0 track.input else builtins.foldl' reducers.size 0 ( builtins.attrValues track.input ) ;
                                   type = track : builtins.typeOf track.input ;
                                 } ;
-                              list =
+                              processors =
                                 [
 				  sets.input
                                   sets.index
@@ -83,7 +83,7 @@
                                   sets.processed
                                   sets.output
                                 ] ;
-                              sets = builtins.mapAttrs mappers.set.process fields ;
+                              sets = builtins.mapAttrs mappers.set.process processors ;
                               in builtins.foldl' reducers.process { } list ;
                         reducers =
                           {
