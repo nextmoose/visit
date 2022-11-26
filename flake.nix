@@ -26,7 +26,7 @@
                       let
                         functions =
                           {
-                            find = fun : builtins.trace ( fun null ) ( builtins.head ( builtins.filter ( f : builtins.typeOf f == "lambda" ) [ fun undefined ( x : x.processed ) ] ) ) ;
+                            find = fun : builtins.trace ( builtins.typeOf fun ) ( builtins.head ( builtins.filter ( f : builtins.typeOf f == "lambda" ) [ fun undefined ( x : x.processed ) ] ) ) ;
                           } ;
                         mappers =
                           {
