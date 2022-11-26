@@ -46,7 +46,7 @@
                               fields =
                                 {
                                   index = track : first ;
-				  input = track : { input = value ; } ;
+				  input = track : builtins.trace "<< ${ builtins.typeOf value }" { input = value ; } ;
                                   is-list = track : track.type == "list" ;
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
