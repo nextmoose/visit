@@ -27,7 +27,7 @@
                         functions =
                           {
                             find = fun : builtins.head ( builtins.filter ( f : builtins.typeOf f == "lambda" ) [ fun undefined ( x : x ) ] ) ;
-                          }
+                          } ;
                         mappers =
                           {
                            list =
@@ -51,19 +51,21 @@
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
                                     track :
-                                      {
-                                        bool = bool ;
-                                        float = float ;
-                                        int = int ;
-                                        lambda = lambda ;
-                                        list = list ;
-                                        null = null ;
-                                        path = path ;
-                                        set = set ;
-                                        string = string ;
-                                      } ;
+				      builtins.getAttr
+				        track.type
+                                        {
+                                          bool = bool ;
+                                          float = float ;
+                                          int = int ;
+                                          lambda = lambda ;
+                                          list = list ;
+                                          null = null ;
+                                          path = path ;
+                                          set = set ;
+                                          string = string ;
+                                        } ;
                                   lambda-output = track : functions.find track.lambda-input ;
-                                  output = track : track.lambda-output track.processed ;
+                                  output = track : track.lambda-output track ;
                                   processed = track : if track.is-simple then track.input else if track.is-list then builtins.map mappers.list.processed track.input else builtins.mapAttrs mappers.set.processed track.input ;
                                   size = track : if track.is-simple then 1 else if track.is-list then builtins.foldl' reducers.size 0 track.input else builtins.foldl' reducers.size 0 ( builtins.attrValues track.input ) ;
                                   type = track : builtins.typeOf track.input ;
@@ -74,7 +76,7 @@
                                   sets.index
                                   sets.size
                                   sets.type
-                                  sets.list
+                                  sets.is-list
                                   sets.is-simple
                                   sets.lambda-input
                                   sets.lambda-output
