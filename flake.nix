@@ -51,7 +51,7 @@
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
                                     track :
-				      builtins.trace ":: ${ if track.type then "Y" else "N" }" (
+				      builtins.trace ":: ${ track.type }" (
 				      builtins.getAttr
 				        track.type
                                         {
