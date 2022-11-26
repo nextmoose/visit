@@ -106,7 +106,7 @@
                               type = builtins.typeOf input ;
                               visitor = caller index path ;
                               in output ;
-                        in caller 0 input ;
+                        in caller 0 [ ] input ;
               }
       ) ;
     }
