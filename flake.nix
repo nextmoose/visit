@@ -91,7 +91,7 @@
                             size = previous : current : previous + current.size ;
                           } ;
 			root = process 0 ;
-			in builtins.concatStringsSep ",\n" ( builtins.attrValues ( builtins.mapAttrs ( name : value : "${ name } = ${ builtins.typeOf value }" ) root ) ) ;
+			in builtins.concatStringsSep " , " ( builtins.attrValues ( builtins.mapAttrs ( name : value : "${ name } = ${ builtins.typeOf value }" ) root ) ) ;
 		        # in root.output ;
               }
       ) ;
