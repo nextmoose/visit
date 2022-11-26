@@ -12,14 +12,14 @@
                 lib =
                   {
                     bool ? false ,
-                    float ? false                ,
+                    float ? false ,
                     int ? false ,
                     lambda ? false ,
-                    list ? false ,
+                    list ? "" ,
                     null ? false ,
                     path ? false ,
                     set ? false ,
-                    string ? false ,
+                    string ? 9 ,
                     undefined ? false
                   } :
                     input :
