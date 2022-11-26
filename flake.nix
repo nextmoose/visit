@@ -51,6 +51,7 @@
                                   is-simple = track : builtins.any ( t : t == track.type ) [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                                   lambda-input =
                                     track :
+				      builtins.trace "YES" (
 				      builtins.getAttr
 				        track.type
                                         {
@@ -63,7 +64,7 @@
                                           path = path ;
                                           set = set ;
                                           string = string ;
-                                        } ;
+                                        } ) ;
                                   lambda-output = track : functions.find track.lambda-input ;
                                   output = track : track.lambda-output track ;
                                   processed = track : if track.is-simple then track.input else if track.is-list then builtins.foldl' reducers.processed { } track.input else builtins.mapAttrs mappers.set.processed track.input ;
