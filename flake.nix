@@ -64,8 +64,7 @@
                                           string = string ;
                                         } ;
                                   lambda-output = track : functions.find track.lambda-input ;
-                                  output = track : if track.is-simple then track.penultimate else builtins.map mappers.list.processed track.penultimate ;
-                                  penultimate = track : track.lambda-output track ;
+                                  output = track : track.lambda-output track ;
                                   processed = track : if track.is-simple then track.input else if track.is-list then builtins.map mappers.list.processed track.input else builtins.mapAttrs mappers.set.processed track.input ;
                                   size = track : if track.is-simple then 1 else if track.is-list then builtins.foldl' reducers.size 0 track.input else builtins.foldl' reducers.size 0 ( builtins.attrValues track.input ) ;
                                   type = track : builtins.typeOf track.input ;
@@ -80,7 +79,6 @@
                                   sets.lambda-input
                                   sets.lambda-output
                                   sets.processed
-				  sets.penultimate
                                   sets.output
                                 ] ;
                               sets = builtins.mapAttrs mappers.set.process fields ;
