@@ -63,25 +63,26 @@
                                   is-type = item : item == type ;
                                 } ;
                               processed =
-                                if is-simple then input
-                                else if is-list then builtins.foldl' reducers.processed [ ] ( builtins.genList predicates.identity ( builtins.length input ) )
-                                else builtins.foldl' reducers.processed { } ( builtins.attrNames input ) ;
+			        let
+				  initial = if is-simple then input else if is-list then [ ] else { } ;
+				  list = if is-simple then [ ] else if is-list then builtins.genList ( builtins.length input ) else builtins.attrNames input ;
+				  in builtins.foldl' reducers.processed initial list ;
                               reducers =
                                 {
-                                  list =
+                                  processed =
                                     previous : current :
                                       let
-                                        last = builtins.foldl' reducers.size index ( if is-simple then builtins.throw "1f86000d-367e-4024-a470-c253d82b847f" else if is-list then previous else builtins.attrValues previous )  ;
+                                        last = builtins.foldl' reducers.size index ( if is-simple then previous else if is-list then previous else builtins.attrValues previous )  ;
                                         next =
                                           caller
                                             ( index + last )
                                             ( builtins.concatLists [ path [ current ] ] )
                                             (
-                                              if is-simple then builtins.throw "d9cf8372-1366-4ecb-981a-415799a1e5ab"
+                                              if is-simple then input
                                               else if is-list then builtins.elemAt input current
                                               else builtins.getAttr current input
                                             ) ;
-                                        in if is-simple then builtins.throw "672e88d0-6ac4-4160-8570-771a389f50cd" else if is-list then builtins.concatLists [ previous [ next ] ] else previous // next ;
+                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // next ;
                                   size = previous : current : previous + current.size ;
                                 } ;
                               size = if is-simple then 1 else if is-list then builtins.foldl' reducers.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrNames input ) ;
