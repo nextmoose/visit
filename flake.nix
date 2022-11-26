@@ -69,7 +69,7 @@
                                   output = track : track.lambda-output track ;
                                   processed = track : if track.is-simple then track.input else if track.is-list then builtins.foldl' reducers.processed { } track.input else builtins.mapAttrs mappers.set.processed track.input ;
                                   size = track : if track.is-simple then 1 else if track.is-list then builtins.foldl' reducers.size 0 track.input else builtins.foldl' reducers.size 0 ( builtins.attrValues track.input ) ;
-                                  type = track : builtins.typeOf track.input ;
+                                  type = track : builtins.trace ".. " ( builtins.typeOf track.input ) ;
                                 } ;
                               processors =
                                 [
