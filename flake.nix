@@ -16,8 +16,8 @@
                     int ? false ,
                     lambda ? false ,
                     list ? false ,
-                    null ? "" ,
-                    path ? "" ,
+                    null ? false ,
+                    path ? false ,
                     set ? "" ,
                     string ? "" ,
                     undefined ? ""
