@@ -65,7 +65,7 @@
                               processed =
 			        let
 				  initial = if is-simple then input else if is-list then [ ] else { } ;
-				  list = if is-simple then [ ] else if is-list then builtins.genList ( builtins.length input ) else builtins.attrNames input ;
+				  list = if is-simple then [ ] else if is-list then builtins.genList predicates.identity ( builtins.length input ) else builtins.attrNames input ;
 				  in builtins.foldl' reducers.processed initial list ;
                               reducers =
                                 {
