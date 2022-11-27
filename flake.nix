@@ -65,7 +65,7 @@
                                 } ;
                               processed =
                                 let
-				  indices = if is-simple then null else if is-list then builtins.genList ( builtins.length input ) else builtins.attrNames input ;
+				  indices = if is-simple then null else if is-list then builtins.genList ( x : x ) ( builtins.length input ) else builtins.attrNames input ;
                                   initial = if is-simple then input else if is-list then [ ] else { } ;
                                   in builtins.foldl' reducers.processed initial indices ;
 			      reduced = if is-simple then processed else if is-list then builtins.map ( value : value.processed ) processed else builtins.mapAttrs ( name : value : value.processed ) processed ;
