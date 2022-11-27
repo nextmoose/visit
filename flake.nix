@@ -59,7 +59,7 @@
                                       undefined = undefined ;
                                       value = value ;
                                     } ;
-                              output = lambdas.value track ;
+                              node = caller 0 [ ] input ;
                               predicates =
                                 {
                                   identity = x : x ;
@@ -100,7 +100,6 @@
                                 } ;
                               type = builtins.typeOf input ;
                               in track ;
-                        let node = caller 0 [ ] input ;
                         in node.lambdas.value node ;
               }
       ) ;
