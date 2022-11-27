@@ -74,25 +74,15 @@
                                   processed =
                                     previous : current :
                                       let
-                                        last = caller index path previous ;
-                                        next =
-                                          caller
-                                            ( index + last.size )
-                                            ( builtins.concatLists [ path [ current ] ] )
-                                            (
-                                              if is-simple then input
-                                              else if is-list then builtins.elemAt input current
-                                              else builtins.getAttr current input
-                                            ) ;
-                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
+				        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else builtins.elemAt input current else builtins.getAttr current input ) ;
+                                        in if is-simple then previous else if is-list then node.lambdas.value node else { "${ current }" = node.lambdas.value node ;
                                   size =
 				    previous : current :
 				      let
-				        element = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
-					track = caller index path element ;
-				        in previous + track.size ;
+				        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else builtins.elemAt input current else builtins.getAttr current input ) ;
+				        in previous + node.size ;
                                 } ;
-                              size = if is-simple then 1 else builtins.foldl' reducers.size 0 indices ;
+                              size = builtins.foldl' reducers.size ( if is-simple then 1 else 0 ) indices ;
                               track =
                                 {
                                   caller = caller ;
@@ -107,12 +97,11 @@
                                   reducers = reducers ;
                                   size = size ;
                                   type = type ;
-                                  visitor = visitor ;
                                 } ;
                               type = builtins.typeOf input ;
-                              visitor = caller index path ;
-                              in output ;
-                        in caller 0 [ ] input ;
+                              in track ;
+                        let node = caller 0 [ ] input ;
+			in node.lambdas.value node ;
               }
       ) ;
     }
