@@ -68,7 +68,7 @@
 				  indices = if is-simple then null else if is-list then builtins.genList ( builtins.length input ) else builtins.attrNames input ;
                                   initial = if is-simple then input else if is-list then [ ] else { } ;
                                   in builtins.foldl' reducers.processed initial indices ;
-			      reduced = builtins.map ( track : track.processed ) processed ;
+			      reduced = if is-simple then processed else if is-list builtins.map ( value : value.processed ) processed else builtins.mapAttrs ( name : value : value.processed ) processed ;
                               reducers =
                                 {
                                   processed =
