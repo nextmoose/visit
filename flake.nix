@@ -27,7 +27,6 @@
                         caller =
                           index : path : input :
                             let
-                              indices = if is-simple then [ ] else if is-list then builtins.genList ( x : x ) ( builtins.length input ) else builtins.attrNames input ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
@@ -66,8 +65,9 @@
                                 } ;
                               processed =
                                 let
+				  indices = if is-simple then null else if is-list then builtins.genList ( builtins.length input ) else builtins.attrNames input ;
                                   initial = if is-simple then input else if is-list then [ ] else { } ;
-                                  in builtins.foldl' reducers.processed initial indices ;
+                                  in builtins.foldl' reducers.processed initial input ;
 			      reduced = builtins.map ( track : track.processed ) processed ;
                               reducers =
                                 {
@@ -76,10 +76,10 @@
 				      let
 				        next = caller next-index next-path next-input ;
 				        next-index = index + previous-size ;
-					next-input = if is-simple then builtins.throw "93b22d61-278f-4894-92ab-d2b39f74a68e" else if is-list then builtins.elemAt previous input else builtins.getAttr current input ;
+					next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
 					next-path = builtins.concatLists [ path [ current ] ] ;
 					previous-size = builtins.foldl' reducers.size 0 previous ;
-					in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
+				        in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
 			          size = previous : current : previous + current.size ;
                                 } ;
                               track =
