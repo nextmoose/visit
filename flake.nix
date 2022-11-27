@@ -68,21 +68,20 @@
                                 let
                                   initial = if is-simple then input else if is-list then [ ] else { } ;
                                   in builtins.foldl' reducers.processed initial indices ;
+			      reduced = builtins.map ( track : track.processed ) processed ;
                               reducers =
                                 {
                                   processed =
-                                    previous : current :
-                                      let
-                                        size = builtins.foldl' ( previous : current : previous + current.size ) 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
-                                        node = caller ( index + size ) ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
-                                        in if is-simple then previous else if is-list then builtins.concatLists [ previous [ ( node.lambdas.value node ) ] ] else previous // { "${ current }" = node.lambdas.value node ; } ;
-                                  size =
-                                    previous : current :
-                                      let
-                                        node = caller ( index + previous ) ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
-                                        in previous + node.size ;
+				    previous : current ;
+				      let
+				        next = caller next-index next-path next-input ;
+				        next-index = index + previous-size ;
+					next-input = if is-simple then builtins.throw "93b22d61-278f-4894-92ab-d2b39f74a68e" else if is-list then builtins.elemAt previous input else builtins.getAttr current input ;
+					next-path = builtins.concatLists [ path [ current ] ] ;
+					previous-size = builtins.foldl' reducers.size 0 previous ;
+					in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
+			          size = previous : current : previous + current.size ;
                                 } ;
-                              size = builtins.foldl' reducers.size ( if is-simple then 1 else 0 ) indices ;
                               track =
                                 {
                                   caller = caller ;
@@ -94,8 +93,8 @@
                                   path = path ;
                                   predicates = predicates ;
                                   processed = processed ;
+				  reduced = reduced ;
                                   reducers = reducers ;
-                                  size = size ;
                                   type = type ;
                                 } ;
                               type = builtins.typeOf input ;
