@@ -90,7 +90,7 @@
 				      let
 				        element = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
 					track = caller index path element ;
-				        in builtins.trace "YES ${ if is-simple then "SIMPLE" else if is-list then "LIST" else "SET ${ builtins.toString previous }" }" ( previous + track.size ) ;
+				        in builtins.trace "YES ${ if is-simple then "SIMPLE" else if is-list then "LIST" else "SET ${ builtins.toString previous } ${ current }" }" ( previous + track.size ) ;
                                 } ;
                               size = builtins.foldl' reducers.size 0 indices ;
                               track =
