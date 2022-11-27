@@ -74,7 +74,7 @@
                                   processed =
                                     previous : current :
                                       let
-				        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else builtins.elemAt input current else builtins.getAttr current input ) ;
+				        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
                                         in if is-simple then previous else if is-list then node.lambdas.value node else { "${ current }" = node.lambdas.value node ;
                                   size =
 				    previous : current :
