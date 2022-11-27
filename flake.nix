@@ -73,12 +73,13 @@
                                   processed =
                                     previous : current :
                                       let
-                                        node = caller ( index + ( if is-simple then 1 else 0 ) ) ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
+				        size = builtins.foldl' ( previous : current : previous + current.size ) 0 previous ;
+                                        node = caller ( index + size ) ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ ( node.lambdas.value node ) ] ] else previous // { "${ current }" = node.lambdas.value node ; } ;
                                   size =
                                     previous : current :
                                       let
-                                        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
+                                        node = caller ( index + previous ) ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
                                         in previous + node.size ;
                                 } ;
                               size = builtins.foldl' reducers.size ( if is-simple then 1 else 0 ) indices ;
