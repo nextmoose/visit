@@ -90,7 +90,7 @@
 				      let
 				        element = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
 					track = caller index path element ;
-				        in previous + track.size ;
+				        in builtins.trace "YES" ( previous + track.size ) ;
                                 } ;
                               size = builtins.foldl' reducers.size 0 indices ;
                               track =
