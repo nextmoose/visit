@@ -22,7 +22,7 @@
                     string ? false ,
                     undefined ? false
                   } :
-                    input :
+		    value :
                       let
                         caller =
                           index : path : input :
