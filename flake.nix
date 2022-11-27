@@ -85,9 +85,9 @@
                                               else builtins.getAttr current input
                                             ) ;
                                         in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
-                                  size =
-				    previous : current :
-				      previous + ( if is-simple then 1 else if is-list then builtins.getAttr "size" ( builtins.elemAt input current ) else builtins.getAttr "size" ( builtins.getAttr current input ) ) ;
+                                  size = 1 ;
+				  #  previous : current :
+				  #    previous + ( if is-simple then 1 else if is-list then builtins.getAttr "size" ( builtins.elemAt input current ) else builtins.getAttr "size" ( builtins.getAttr current input ) ) ;
                                 } ;
                               size = if is-simple then 1 else if is-list then builtins.foldl' reducers.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrNames input ) ;
                               track =
