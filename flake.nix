@@ -68,7 +68,7 @@
 			        let
 				  initial = if is-simple then input else if is-list then [ ] else { } ;
 				  list = if is-simple then [ ] else if is-list then builtins.genList predicates.identity ( builtins.length input ) else builtins.attrNames input ;
-				  in builtins.trace "YES: ${ builtins.concatStringsSep " , " ( builtins.map builtins.typeOf ( builtins.attrValues ( builtins.foldl' reducers.processed initial list ) ) ) }" ( builtins.foldl' reducers.processed initial list ) ;
+				  in builtins.foldl' reducers.processed initial list ;
                               reducers =
                                 {      
                                   processed =
@@ -84,7 +84,7 @@
                                               else if is-list then builtins.elemAt input current
                                               else builtins.getAttr current input
                                             ) ;
-                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = builtins.trace ( builtins.toString ( current ) ) next ; } ;
+                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
                                   size =
 				    previous : current :
 				      previous + ( if is-simple then 1 else if is-list then builtins.getAttr "size" ( builtins.elemAt input current ) else builtins.getAttr "size" ( builtins.getAttr current input ) ) ;
