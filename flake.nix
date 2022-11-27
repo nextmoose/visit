@@ -22,7 +22,7 @@
                     string ? false ,
                     undefined ? false
                   } :
-		    input :
+                    input :
                       let
                         caller =
                           index : path : input :
@@ -33,10 +33,10 @@
                               lambdas =
                                 let
                                   find =
-				    name : value :
-				      let
-				        filtered = builtins.filter ( value : builtins.typeOf value == "lambda" ) [ value undefined ] ;
-					in if builtins.length filtered == 0 then builtins.throw "0f308e77-0fb7-43cc-86e8-c1dd58d75092" else builtins.head filtered ;
+                                    name : value :
+                                      let
+                                        filtered = builtins.filter ( value : builtins.typeOf value == "lambda" ) [ value undefined ] ;
+                                        in if builtins.length filtered == 0 then builtins.throw "0f308e77-0fb7-43cc-86e8-c1dd58d75092" else builtins.head filtered ;
                                   input =
                                     {
                                       bool = bool ;
@@ -66,21 +66,21 @@
                                   is-type = item : item == type ;
                                 } ;
                               processed =
-			        let
-				  initial = if is-simple then input else if is-list then [ ] else { } ;
-				  in builtins.foldl' reducers.processed initial indices ;
+                                let
+                                  initial = if is-simple then input else if is-list then [ ] else { } ;
+                                  in builtins.foldl' reducers.processed initial indices ;
                               reducers =
                                 {
                                   processed =
                                     previous : current :
                                       let
-				        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
+                                        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
                                         in if is-simple then previous else if is-list then node.lambdas.value node else { "${ current }" = node.lambdas.value node ;
                                   size =
-				    previous : current :
-				      let
-				        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else builtins.elemAt input current else builtins.getAttr current input ) ;
-				        in previous + node.size ;
+                                    previous : current :
+                                      let
+                                        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else builtins.elemAt input current else builtins.getAttr current input ) ;
+                                        in previous + node.size ;
                                 } ;
                               size = builtins.foldl' reducers.size ( if is-simple then 1 else 0 ) indices ;
                               track =
@@ -101,7 +101,7 @@
                               type = builtins.typeOf input ;
                               in track ;
                         let node = caller 0 [ ] input ;
-			in node.lambdas.value node ;
+                        in node.lambdas.value node ;
               }
       ) ;
     }
