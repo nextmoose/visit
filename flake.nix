@@ -79,7 +79,7 @@
                                   size =
                                     previous : current :
                                       let
-                                        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else builtins.elemAt input current else builtins.getAttr current input ) ;
+                                        node = caller index ( builtins.concatLists [ path [ current index ] ] ) ( if is-simple then null else if is-list then builtins.elemAt input current else builtins.getAttr current input ) ;
                                         in previous + node.size ;
                                 } ;
                               size = builtins.foldl' reducers.size ( if is-simple then 1 else 0 ) indices ;
