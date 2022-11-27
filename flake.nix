@@ -74,10 +74,10 @@
                                   processed =
                                     previous : current :
                                       let
-                                        last = builtins.foldl' reducers.size index ( if is-simple then previous else if is-list then previous else builtins.attrValues previous ) ;
+                                        last = caller index path previous ;
                                         next =
                                           caller
-                                            ( index + last )
+                                            ( index + last.size )
                                             ( builtins.concatLists [ path [ current ] ] )
                                             (
                                               if is-simple then input
@@ -90,9 +90,9 @@
 				      let
 				        element = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
 					track = caller index path element ;
-				        in builtins.trace "YES ${ if is-simple then "SIMPLE" else if is-list then "LIST" else "SET ${ builtins.toString previous } ${ current }" }" ( previous + track.size ) ;
+				        in previous + track.size ;
                                 } ;
-                              size = builtins.foldl' reducers.size 0 indices ;
+                              size = if is-simple then 1 else builtins.foldl' reducers.size 0 indices ;
                               track =
                                 {
                                   caller = caller ;
