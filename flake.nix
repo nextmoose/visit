@@ -80,7 +80,7 @@
 					next-path = builtins.concatLists [ path [ current ] ] ;
 					previous-size = builtins.foldl' reducers.size 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
 				        in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
-			          size = previous : current : previous + current.size ;
+			          size = previous : current : previous + ( builtins.trace ( builtins.concatStringsSep " , " ( builtins.attrNames current ) ) current.size ) ;
                                 } ;
                               track =
                                 {
