@@ -74,7 +74,7 @@
                                   processed =
                                     previous : current :
                                       let
-                                        last = trace ( builtins.typeOf reducers.size ) ( builtins.foldl' reducers.size index ( if is-simple then previous else if is-list then previous else builtins.attrValues previous ) ) ;
+                                        last = builtins.trace ( builtins.typeOf reducers.size ) ( builtins.foldl' reducers.size index ( if is-simple then previous else if is-list then previous else builtins.attrValues previous ) ) ;
                                         next =
                                           caller
                                             ( index + last )
