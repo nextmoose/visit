@@ -82,6 +82,7 @@
 				        in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
 			          size = previous : current : previous + ( builtins.trace ( builtins.concatStringsSep " , " ( builtins.attrNames current ) ) current.size ) ;
                                 } ;
+				size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
                               track =
                                 {
                                   caller = caller ;
@@ -95,6 +96,7 @@
                                   processed = processed ;
 				  reduced = reduced ;
                                   reducers = reducers ;
+				  size = size ;
                                   type = type ;
                                 } ;
                               type = builtins.typeOf input ;
