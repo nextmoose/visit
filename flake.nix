@@ -68,7 +68,7 @@
 			        let
 				  initial = if is-simple then input else if is-list then [ ] else { } ;
 				  list = if is-simple then [ ] else if is-list then builtins.genList predicates.identity ( builtins.length input ) else builtins.attrNames input ;
-				  in builtins.trace "YES: ${ builtins.typeOf ( builtins.foldl' reducers.processed initial list ) }" ( builtins.foldl' reducers.processed initial list ) ;
+				  in builtins.trace "YES: ${ builtins.concatStringsSep " , " ( builtins.attrNames ( builtins.foldl' reducers.processed initial list ) ) }" ( builtins.foldl' reducers.processed initial list ) ;
                               reducers =
                                 {      
                                   processed =
