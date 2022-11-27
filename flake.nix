@@ -72,7 +72,7 @@
                               reducers =
                                 {
                                   processed =
-				    previous : current ;
+				    previous : current :
 				      let
 				        next = caller next-index next-path next-input ;
 				        next-index = index + previous-size ;
