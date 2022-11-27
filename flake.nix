@@ -27,6 +27,7 @@
                         caller =
                           index : path : input :
                             let
+                              indices = if is-simple then [ ] else if is-list then builtins.genList ( x : x ) ( builtins.length input ) else builtins.attrNames input ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
@@ -67,10 +68,9 @@
                               processed =
 			        let
 				  initial = if is-simple then input else if is-list then [ ] else { } ;
-				  list = if is-simple then [ ] else if is-list then builtins.genList predicates.identity ( builtins.length input ) else builtins.attrNames input ;
-				  in builtins.foldl' reducers.processed initial list ;
+				  in builtins.foldl' reducers.processed initial indices ;
                               reducers =
-                                {      
+                                {
                                   processed =
                                     previous : current :
                                       let
@@ -85,11 +85,14 @@
                                               else builtins.getAttr current input
                                             ) ;
                                         in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
-                                  size = previous : current : if is-simple then 1 else 3 ;
-				    # previous : current :
-				    #  previous + ( if is-simple then 1 else if is-list then builtins.getAttr "size" ( builtins.elemAt input current ) else builtins.getAttr "size" ( builtins.getAttr current input ) ) ;
+                                  size =
+				    previous : current :
+				      let
+				        element = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
+					track = caller index path element ;
+				        in previous + track.size ;
                                 } ;
-                              size = if is-simple then 1 else if is-list then builtins.foldl' reducers.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrNames input ) ;
+                              size = builtins.foldl' reducers.size 0 indices ;
                               track =
                                 {
                                   caller = caller ;
