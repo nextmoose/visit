@@ -84,7 +84,7 @@
                                               else if is-list then builtins.elemAt input current
                                               else builtins.getAttr current input
                                             ) ;
-                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = builtins.trace ( builtins.toString ( current ) ) next ; } ;
+                                        in if is-simple then next else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = builtins.trace ( builtins.toString ( current ) ) next ; } null ;
                                   size =
 				    previous : current : -1 ;
 				      # if is-simple then 1
