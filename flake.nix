@@ -31,8 +31,11 @@
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
                                 let
-                                  find = name : element : builtins.head ( builtins.filter ( builtins.typeOf element == "lambda" ) [ element undefined identity ] ) ;
-                                  identity = item : item.processed ;
+                                  find =
+				    name : value :
+				      let
+				        filtered = builtins.head ( builtins.filter ( builtins.typeOf element == "lambda" ) [ element undefined ] ) ;
+					in if builtins.length filtered == 0 then builtins.throw "0f308e77-0fb7-43cc-86e8-c1dd58d75092" else builtins.head filtered ;
                                   input =
                                     {
                                       bool = bool ;
@@ -50,7 +53,6 @@
                                   in
                                     {
                                       find = find ;
-                                      identity = identity ;
                                       input = input ;
                                       output = output ;
                                       undefined = undefined ;
