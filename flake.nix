@@ -81,8 +81,7 @@
                                         previous-size = builtins.foldl' ( previous : current : previous + sizer current ) 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
                                 } ;
-                                size =
-                                  let
+                                size = sizer input ;
                                 # size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
                                 sizer =
                                   input :
