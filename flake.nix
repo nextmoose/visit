@@ -82,7 +82,7 @@
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
                                   size = previous : current : if is-simple then 1 else if is-list then previous + current.size else previous + current.size ;
                                 } ;
-                                size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 ( builtins.genList ( x : x ) ( builtins.length input ) else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
+                                size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 ( builtins.genList ( x : x ) ( builtins.length input ) ) else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
                               track =
                                 {
                                   caller = caller ;
