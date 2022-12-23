@@ -46,7 +46,7 @@
                                     name : value :
                                       let
                                         filtered = builtins.filter ( value : builtins.typeOf value == "lambda" ) [ value undefined ] ;
-                                        in if builtins.length filtered == 0 then builtins.trace name ( builtins.throw "0f308e77-0fb7-43cc-86e8-c1dd58d75092" else builtins.head filtered ) ;
+                                        in if builtins.length filtered == 0 then builtins.trace name ( builtins.throw "0f308e77-0fb7-43cc-86e8-c1dd58d75092" ) else builtins.head filtered ;
                                   input =
                                     {
                                       bool = bool ;
