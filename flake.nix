@@ -78,18 +78,17 @@
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
-                                        previous-size = builtins.foldl' reducers.size 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
+                                        previous-size = builtins.foldl' ( previous : current : previous + sizer current ) 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
-                                    size =
-                                      previous : current :
-                                        let
-                                          size =
-                                            if builtins.typeOf current == "list" then builtins.foldl' reducers.size 0 current
-                                            else if builtins.typeOf current == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues current )
-                                            else 1 ;
-                                        in previous + size ;
                                 } ;
-                                size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
+                                size =
+                                  let
+                                # size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
+                                sizer =
+                                  input :
+                                  if builtins.typeOf input == "list" then builtins.foldl' ( previous : current : previous + current ) 0 ( builtins.map sizer input )
+                                  else if builtins.typeOf input == "set" then builtins.foldl' ( previous : current : previous + current ) 0 ( builtins.map sizer ( builtins.attrValues input ) )
+                                  else 1 ;
                               track =
                                 {
                                   caller = caller ;
