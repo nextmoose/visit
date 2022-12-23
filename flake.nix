@@ -60,7 +60,7 @@
                                       string = string ;
                                     } ;
                                     output = builtins.mapAttrs find input ;
-                                    value = if builtins.hasAttr type input then builtins.getAttr type input else builtins.throw "223c63db-a1d5-48bc-aaca-b4a6c40b15b3" ;
+                                    value = if builtins.hasAttr type output then builtins.getAttr type output else builtins.throw "223c63db-a1d5-48bc-aaca-b4a6c40b15b3" ;
                                   in
                                     {
                                       find = find ;
