@@ -80,7 +80,7 @@
                                         next-path = builtins.concatLists [ path [ current ] ] ;
                                         previous-size = builtins.foldl' reducers.size 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
-                                  size = previous : current : previous + ( builtins.trace "${ if is-list then "is-list" else "not-is-list" }" current.size ) ;
+                                  size = previous : current : previous + ( builtins.trace "${ if is-simple then "is-simple" else "not-is-simple" } ${ if is-list then "is-list" else "not-is-list" }" current.size ) ;
                                 } ;
                                 size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
                               track =
