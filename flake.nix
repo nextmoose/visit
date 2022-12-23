@@ -93,7 +93,7 @@
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
 				  size = previous : current : previous + ( functions.size current ) ;
                                 } ;
-                                size = functions.size input
+                              size = functions.size input ;
                               track =
                                 {
                                   caller = caller ;
