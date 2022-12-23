@@ -27,6 +27,17 @@
                         caller =
                           index : path : input :
                             let
+			      functions =
+			        let
+				  size =
+				    input :
+				      if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
+				      else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
+				      else 1 ;
+				  in
+				    {
+				      size = size ;
+				    } ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
@@ -78,19 +89,15 @@
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
-                                        previous-size = builtins.foldl' ( previous : current : previous + sizer current ) 0 ( if is-simple then [ ] else if is-list then previous else builtins.attrValues previous ) ;
+                                        previous-size = functions.size previous ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
+				  size = previous : current : previous + ( functions.size current ) ;
                                 } ;
-                                size = sizer input ;
-                                # size = if is-simple then 1 else if is-list then builtins.foldl' reducers.size 0 input else builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ;
-                                sizer =
-                                  input :
-                                  if builtins.typeOf input == "list" then builtins.foldl' ( previous : current : previous + current ) 0 ( builtins.map sizer input )
-                                  else if builtins.typeOf input == "set" then builtins.foldl' ( previous : current : previous + current ) 0 ( builtins.map sizer ( builtins.attrValues input ) )
-                                  else 1 ;
+                                size = functions.size input
                               track =
                                 {
                                   caller = caller ;
+				  functions = functions ;
                                   index = index ;
                                   input = input ;
                                   is-list = is-list ;
