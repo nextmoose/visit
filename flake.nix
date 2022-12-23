@@ -85,7 +85,7 @@
                                   processed =
                                     previous : current :
                                       let
-                                        next = caller next-index next-path next-input ;
+                                        next = builtins.trace ( builtins.toString next-index ) ( caller next-index next-path next-input ) ;
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
