@@ -1,4 +1,4 @@
-{
+    {
       inputs =
               {
           flake-utils.url = "github:numtide/flake-utils" ;
@@ -27,17 +27,17 @@
                         caller =
                           index : path : input :
                             let
-			      functions =
-			        let
-				  size =
-				    input :
-				      if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
-				      else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
-				      else 1 ;
-				  in
-				    {
-				      size = size ;
-				    } ;
+                              functions =
+                                let
+                                  size =
+                                    input :
+                                      if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
+                                      else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
+                                      else 1 ;
+                                  in
+                                    {
+                                      size = size ;
+                                    } ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
                               lambdas =
@@ -91,13 +91,13 @@
                                         next-path = builtins.concatLists [ path [ current ] ] ;
                                         previous-size = functions.size previous ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
-				  size = previous : current : previous + ( functions.size current ) ;
+                                  size = previous : current : previous + ( functions.size current ) ;
                                 } ;
                               size = functions.size input ;
                               track =
                                 {
                                   caller = caller ;
-				  functions = functions ;
+                                  functions = functions ;
                                   index = index ;
                                   input = input ;
                                   is-list = is-list ;
