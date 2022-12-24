@@ -33,7 +33,7 @@
                                     input :
                                       if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
                                       else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
-                                      else builtins.trace ( if builtins.any ( t : t == input ) [ "structure" "logs" "log" ] then input else "NOT" ) 1 ;
+                                      else 1 ;
                                   in
                                     {
                                       size = size ;
@@ -85,7 +85,7 @@
                                   processed =
                                     previous : current :
                                       let
-                                        next = builtins.trace ( "processed . next ${ builtins.toString next-index } ${ builtins.toString index } ${ builtins.toString previous-size }" ) ( caller next-index next-path next-input ) ;
+                                        next = caller next-index next-path next-input ;
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
