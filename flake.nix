@@ -42,6 +42,7 @@
                                   in
                                     {
                                       size = size ;
+				      size-input = size-input ;
                                     } ;
                               is-list = type == "list" ;
                               is-simple = builtins.any predicates.is-type [ "bool" "float" "int" "lambda" "null" "path" "string" ] ;
