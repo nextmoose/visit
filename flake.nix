@@ -31,9 +31,9 @@
                                 let
                                   size =
                                     input :
-                                      if builtins.typeOf input == "list" then let x = builtins.foldl' reducers.size 0 input ; in builtins.trace "list ${ builtins.toString x }" x
-                                      else if builtins.typeOf input == "set" then let x = builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ; in builtins.trace "set ${ builtins.toString x }" x
-                                      else builtins.trace "simple ${ if builtins.typeOf input == "string" then "STRING - ${ builtins.toString input }" else "LAMBDA" } 1" 1 ;
+                                      if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
+                                      else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
+                                      else 1 ;
                                   in
                                     {
                                       size = size ;
