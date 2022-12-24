@@ -31,7 +31,7 @@
                                 let
                                   size =
                                     input :
-                                      if builtins.typeOf input == "list" then builtins.trace "functions.size list" ( builtins.foldl' reducers.size 0 input )
+                                      if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
                                       else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
                                       else 1 ;
                                   in
