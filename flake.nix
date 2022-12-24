@@ -96,6 +96,7 @@
                               size = functions.size input ;
                               track =
                                 {
+				  alpha = "GREAT" ;
                                   caller = caller ;
                                   functions = functions ;
                                   index = index ;
