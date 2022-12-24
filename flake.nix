@@ -31,7 +31,7 @@
                                 let
                                   size =
                                     input :
-                                      if builtins.typeOf input == "list" then builtins.foldl' reducers.size 0 input
+                                      if builtins.typeOf input == "list" then builtins.trace "functions.size list" ( builtins.foldl' reducers.size 0 input )
                                       else if builtins.typeOf input == "set" then builtins.foldl' reducers.size 0 ( builtins.attrValues input )
                                       else 1 ;
                                   in
@@ -85,7 +85,7 @@
                                   processed =
                                     previous : current :
                                       let
-                                        next = builtins.trace ( "next ${ builtins.toString next-index } ${ builtins.toString index } ${ builtins.toString previous-size }" ) ( caller next-index next-path next-input ) ;
+                                        next = builtins.trace ( "processed . next ${ builtins.toString next-index } ${ builtins.toString index } ${ builtins.toString previous-size }" ) ( caller next-index next-path next-input ) ;
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
