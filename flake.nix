@@ -34,6 +34,11 @@
                                       if builtins.typeOf input == "list" then let x = builtins.foldl' reducers.size 0 input ; in builtins.trace "LIST ${ builtins.toString x }" x
                                       else if builtins.typeOf input == "set" then let x = builtins.foldl' reducers.size 0 ( builtins.attrValues input ) ; in builtins.trace "SET ${ builtins.toString x }" x
                                       else builtins.trace "SIMPLE 1 ${ builtins.typeOf input } ${ if builtins.typeOf input == "lambda" then "LAMBDA" else builtins.toString input }" 1 ;
+				  size-inputs =
+				    input :
+				      if builtins.typeOf input == "list" then builtins.foldl' ( previous : current : previous + current.size ) 0 input
+				      else if builtins.typeOf input == "set" then builtins.foldl' ( previous : current : previous + current.size ) 0 ( builtins.attrValues input )
+				      else builtins.throw "a54f80de-06e1-4c9c-9db4-2a5be6f912a6" ;
                                   in
                                     {
                                       size = size ;
@@ -93,8 +98,7 @@
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
-                                        previous-input = builtins.map mappers.input previous ;
-                                        previous-size = functions.size previous-input ;
+                                        previous-size = functions.size-input previous ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
                                   size = previous : current : previous + ( functions.size current ) ;
                                 } ;
