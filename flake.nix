@@ -69,6 +69,10 @@
                                       undefined = undefined ;
                                       value = value ;
                                     } ;
+		              mappers =
+			        {
+				  input = value : value.input ;
+				} ;
                               predicates =
                                 {
                                   identity = x : x ;
@@ -89,14 +93,14 @@
                                         next-index = index + previous-size ;
                                         next-input = if is-simple then input else if is-list then builtins.elemAt input current else builtins.getAttr current input ;
                                         next-path = builtins.concatLists [ path [ current ] ] ;
-                                        previous-size = functions.size previous ;
+					previous-input = builtins.map mappers.input previous ;
+                                        previous-size = functions.size previous-input ;
                                         in if is-simple then previous else if is-list then builtins.concatLists [ previous [ next ] ] else previous // { "${ current }" = next ; } ;
                                   size = previous : current : previous + ( functions.size current ) ;
                                 } ;
                               size = functions.size input ;
                               track =
                                 {
-				  alpha = "GREAT" ;
                                   caller = caller ;
                                   functions = functions ;
                                   index = index ;
@@ -104,6 +108,7 @@
                                   is-list = is-list ;
                                   is-simple = is-simple ;
                                   lambdas = lambdas ;
+				  mappers ;
                                   path = path ;
                                   predicates = predicates ;
                                   processed = processed ;
