@@ -18,7 +18,7 @@
               } :
                 input :
                   let
-		    _path = path ;
+                    _path = path ;
                     caller =
                       index : path : input :
                         let
@@ -74,6 +74,15 @@
                             {
                               input = value : value.input ;
                             } ;
+			  parallel =
+			    object :
+			      let
+			        reducer =
+				  previous : current :
+				    if builtins.typeOf current == "int" && builtins.typeOf previous == "list" then builtins.elemAt previous current
+				    else if builtins.typeOf current == "string" && builtins.typeOf previous == "set" then builtins.getAttr current previous
+				    else builtins.throw "e249763f-f4d2-4525-ab51-0fba8c4904f6" ;
+			        in builtins.foldl' reducer object path ;
                           predicates =
                             {
                               identity = x : x ;
@@ -109,12 +118,14 @@
                               is-simple = is-simple ;
                               lambdas = lambdas ;
                               mappers = mappers ;
+			      parallel = parallel ;
                               path = path ;
                               predicates = predicates ;
                               processed = processed ;
                               reduced = reduced ;
                               reducers = reducers ;
                               size = size ;
+                              throw = uuid : builtins.throw ( builtins.concatStringsSep " " ( builtins.map builtins.toString ( builtins.concatLists [ [ uuid type ] path ] ) ) ) ;
                               type = type ;
                             } ;
                           type = builtins.typeOf input ;
