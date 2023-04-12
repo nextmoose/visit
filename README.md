@@ -13,6 +13,7 @@ visit can handle arbitrary nesting with ease.
 ]
 ```
 becomes
+```
 [
   { a = ...evaluation ; b = ...evaluation... ; }
   { c = ...evaluation ; d = ...evaulation... ;
